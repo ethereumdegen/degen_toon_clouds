@@ -128,3 +128,6 @@ impl MaterialExtension for Plane3dCloudMaterialBase {
 
     */
 }
+
+
+// see https://github.com/bevyengine/bevy/blob/1030a99b8e2680a7e696d6433b79f5671768231c/crates/bevy_pbr/src/render/forward_io.wgsl#L32-L56

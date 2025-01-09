@@ -157,13 +157,12 @@ fn fragment(
      
     let surface_noise = smoothstep(surface_noise_cutoff -  smoothstep_tolerance_band, surface_noise_cutoff +  smoothstep_tolerance_band ,    combined_noise_sample );
 
- 
-
+  
 
     var surface_noise_color = toon_water_uniforms.foam_color;
     surface_noise_color.a *= surface_noise;
 
-    var color = alpha_blend(surface_noise_color, water_color);
+    var color =  surface_noise_color ;
  
     return color;
 }
