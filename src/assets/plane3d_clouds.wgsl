@@ -120,8 +120,9 @@ fn fragment(
    let screen_position_uv = (mesh.position.xy + vec2<f32>(0.5,0.5) ) /   view.viewport.zw ;
      
    
-   // let air_color = vec4<f32>(1.0,1.0,1.0,0.0);
-    
+ 
+    let water_color = mix(toon_water_uniforms.depth_gradient_shallow, toon_water_uniforms.depth_gradient_deep,  0.5 );
+  
      
     let surface_noise_cutoff = toon_water_uniforms.surface_noise_cutoff ;
  
@@ -156,12 +157,13 @@ fn fragment(
      
     let surface_noise = smoothstep(surface_noise_cutoff -  smoothstep_tolerance_band, surface_noise_cutoff +  smoothstep_tolerance_band ,    combined_noise_sample );
 
-  
+ 
+
 
     var surface_noise_color = toon_water_uniforms.foam_color;
     surface_noise_color.a *= surface_noise;
 
-    var color =  surface_noise_color;
+    var color = alpha_blend(surface_noise_color, water_color);
  
     return color;
 }
