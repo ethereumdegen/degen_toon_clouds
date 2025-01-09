@@ -1,12 +1,12 @@
 
 use bevy::render::render_asset::RenderAssetUsages;
- 
-use toonwater_material::ToonWaterMaterial;
+  
+use plane3d_cloud_material::Plane3dCloudMaterial;
 use std::io::{Cursor, Read};
 use bevy::asset::load_internal_asset;
 use bevy::prelude::*;
 use bevy::image::{CompressedImageFormats, ImageLoader, ImageSampler, ImageType};
-pub mod toonwater_material;
+pub mod plane3d_cloud_material;
 pub mod camera;
 
 
@@ -15,15 +15,15 @@ pub mod camera;
 
 
 
-pub struct DegenToonWaterPlugin;
+pub struct DegenToonCloudsPlugin;
  
-impl Plugin for DegenToonWaterPlugin {
+impl Plugin for DegenToonCloudsPlugin {
     fn build(&self, app: &mut App) {
 
          load_internal_asset!(
             app,
-            TOON_WATER_SHADER_HANDLE,
-            "assets/toonwater.wgsl",
+            PLANE_3D_CLOUD_SHADER_HANDLE,
+            "assets/plane3d_clouds.wgsl",
             Shader::from_wgsl
         );
 
@@ -63,7 +63,7 @@ impl Plugin for DegenToonWaterPlugin {
          
         app
            
-            .add_plugins(MaterialPlugin::<toonwater_material::ToonWaterMaterial > {
+            .add_plugins(MaterialPlugin::<plane3d_cloud_material::Plane3dCloudMaterial > {
 
                  prepass_enabled: false,
                 ..default() 
@@ -76,26 +76,25 @@ impl Plugin for DegenToonWaterPlugin {
     }
 }
 
-pub(crate) const TOON_WATER_SHADER_HANDLE: Handle<Shader> =
-    Handle::weak_from_u128(4_443_976_952_151_597_127);
-
-
+pub(crate) const PLANE_3D_CLOUD_SHADER_HANDLE: Handle<Shader> =
+    Handle::weak_from_u128(4_296_634_513_987_597_127);
 
  
+ 
 pub const DEFAULT_NOISE_MAP_HANDLE: Handle<Image> =
-    Handle::weak_from_u128(6_154_765_653_326_313_901);
+    Handle::weak_from_u128(6_154_851_784_326_313_901);
 
 
 pub const DEFAULT_DISTORTION_MAP_HANDLE: Handle<Image> =
-    Handle::weak_from_u128(6_441_765_653_326_404_902);
+    Handle::weak_from_u128(6_441_941_965_326_404_902);
 
  
 
  fn update_material_coord_scale (
 
 
-    material_query: Query < ( &MeshMaterial3d<ToonWaterMaterial>, &GlobalTransform)  >,
-    mut materials: ResMut<Assets<ToonWaterMaterial>>
+    material_query: Query < ( &MeshMaterial3d<Plane3dCloudMaterial>, &GlobalTransform)  >,
+    mut materials: ResMut<Assets<Plane3dCloudMaterial>>
 ){
 
     for (mat_handle, global_xform) in material_query.iter(){

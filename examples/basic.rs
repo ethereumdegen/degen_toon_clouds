@@ -2,6 +2,7 @@
 //! The scene includes a patterned texture and a rotation for visualizing the normals and UVs.
 
 use bevy::core_pipeline::prepass::NormalPrepass;
+ 
 use std::f32::consts::PI;
 
   
@@ -21,10 +22,10 @@ use bevy::{core_pipeline::bloom::BloomCompositeMode, prelude::*};
  
 
  
-use degen_toon_water::toonwater_material::{build_toon_water_material,  ToonWaterMaterial};
+use degen_toon_water::plane3d_cloud_material::{build_plane_3d_cloud_material,  Plane3dCloudMaterial};
  
   
-use degen_toon_water:: DegenToonWaterPlugin; 
+use degen_toon_water:: DegenToonCloudsPlugin; 
 use degen_toon_water::camera;
 
 
@@ -40,7 +41,7 @@ fn main() {
         //.add_plugins(bevy_obj::ObjPlugin)
 
 
-        .add_plugins( DegenToonWaterPlugin )
+        .add_plugins( DegenToonCloudsPlugin )
 
 
        //  .add_systems(Update, update_load_folders)
@@ -98,7 +99,7 @@ fn setup(
     
     mut materials: ResMut<Assets<StandardMaterial>>,
 
-    mut toon_water_materials: ResMut<Assets<ToonWaterMaterial>>,
+    mut toon_cloud_materials: ResMut<Assets<Plane3dCloudMaterial>>,
      
 ) {
     /*
@@ -108,14 +109,14 @@ fn setup(
 
     
 
-    let mut water_material = build_toon_water_material (  );
+    let mut cloud_material = build_plane_3d_cloud_material (  );
 
     //you can configure the water easily like this 
-    water_material.extension.custom_uniforms.noise_map_scale = 2.0;
-    water_material.extension.custom_uniforms.surface_noise_cutoff = 0.84; //foaminess 
+   // cloud_material.extension.custom_uniforms.noise_map_scale = 200.0;
+   // cloud_material.extension.custom_uniforms.surface_noise_cutoff = 0.84; //foaminess 
 
   
-    let toon_water_material_handle = toon_water_materials.add( water_material );
+    let toon_water_material_handle = toon_cloud_materials.add( cloud_material );
  
  
     commands.spawn((
@@ -135,117 +136,24 @@ fn setup(
         brightness: 4000.0,
     });
 
-    // Water Plane
+    // Cloud Plane
     // To scale the water plane, be sure to only adjust the scale. If you adjust the mesh vertex size, the shader may not scale properly.
     commands.spawn((
 
 
          Mesh3d(   meshes.add(Plane3d::default().mesh().size(1.0, 1.0))  ), 
          MeshMaterial3d( toon_water_material_handle ) ,
-         Transform::from_scale( (5000.0,2.0,5000.0).into()  ),
+         Transform::from_xyz(0.0,200.0,0.0).with_scale( (5000.0,1.0,5000.0).into()  ),
 
   ));
 
 
 
 
-
-    commands.spawn(  (
-
-
-
-            Mesh3d(   meshes.add(Cuboid::new(555.0, 1.0, 555.0))  ), 
-            MeshMaterial3d (  materials.add(StandardMaterial {
-                base_color: Color::srgb(0.1,0.1,0.1).into(),
-                ..Default::default()
-            }  )) ,
-
-            Transform::from_xyz(0.0, -7.0, 0.0),
-       
-    ) );
-
-
-
-    commands.spawn(
-
-
-        (
-
-            Mesh3d(   meshes.add(Cuboid::new(1.0, 7.0, 1.0))  ), 
-            MeshMaterial3d (  materials.add(StandardMaterial {
-            base_color: Color::srgb(0.6,0.6,0.6).into(),
-            ..Default::default()
-                } )) ,
-
-             Transform::from_xyz(0.0, 0.2, 0.0),
-            )
-
-       );
-
-
-    //cube just under water surface but parallel
-    commands.spawn(
-
-
-
-        (
-
-
-             Mesh3d(  meshes.add(Cuboid::new(1.0, 1.0, 1.0))  ), 
-            MeshMaterial3d (  materials.add(StandardMaterial {
-                    base_color: Color::srgb(0.6,0.6,0.6).into(),
-                    ..Default::default()
-                } )) ,
-
-             Transform::from_xyz(-4.0, -1.0, -8.0),
-            )
-
  
-
-      );
-
-
-       commands.spawn(
-
-
-
-        (
-
-
-             Mesh3d( meshes.add(Torus::new(5.0, 4.0 )) ), 
-            MeshMaterial3d (  materials.add(StandardMaterial {
-                base_color: Color::srgb(0.6,0.6,0.6).into(),
-                ..Default::default()
-            } )) ,
-
-             Transform::from_xyz(0.0, -0.2, 0.0)
-            )
-
  
-
-      );
-
  
-
-         commands.spawn(
-
-
-
-        (
-
-
-             Mesh3d( meshes.add(Torus::new(1.0, 1.0 )) ), 
-            MeshMaterial3d (  materials.add(StandardMaterial {
-                  base_color: Color::srgb(0.6,0.6,0.6).into(),
-                ..Default::default()
-            } )) ,
-
-             Transform::from_xyz(2.0, -0.6, 2.0),
-            )
-
  
-
-      );
 
  
  
@@ -258,8 +166,8 @@ fn setup(
                 ..default()
             },
            Tonemapping::TonyMcMapface,
-            Transform::from_xyz(0.0, 6., 12.0)
-                .looking_at(Vec3::new(0., 1., 0.), Vec3::Y),
+            Transform::from_xyz(0.0, 1., 12.0)
+                .looking_at(Vec3::new(0., 6., 0.), Vec3::Y),
            
         
 

@@ -1,7 +1,26 @@
-## Degen Toon Water Shader for Bevy 
+## Degen Toon Clouds Shader for Bevy 
 
-![degen_water](https://github.com/ethereumdegen/degen_toon_water/assets/6249263/f10f7ff1-c964-4ff2-a8d8-45beef9124f1)
+ 
 
+
+
+Enum with 2 variants of clouds (marker comp) that can be spawned 
+
+
+pub enum ToonCloudType {
+
+	CompoundBillboardCloud {
+
+
+		},
+
+	Noise3dPlaneCloud : {
+
+
+
+	}
+
+}
 
 
 

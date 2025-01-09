@@ -1,4 +1,4 @@
-use crate::{DEFAULT_DISTORTION_MAP_HANDLE, DEFAULT_NOISE_MAP_HANDLE, TOON_WATER_SHADER_HANDLE};
+use crate::{DEFAULT_DISTORTION_MAP_HANDLE, DEFAULT_NOISE_MAP_HANDLE, PLANE_3D_CLOUD_SHADER_HANDLE};
 use bevy::prelude::*;
 use bevy::reflect::TypePath;
 use bevy::render::render_resource::*;
@@ -8,15 +8,12 @@ use bevy::utils::HashMap;
  
 
 
-pub type ToonWaterMaterial = ExtendedMaterial<StandardMaterial, ToonWaterMaterialBase>;
+pub type Plane3dCloudMaterial = ExtendedMaterial<StandardMaterial, Plane3dCloudMaterialBase>;
 
 
-pub fn build_toon_water_material(
-   	//base_color: Color,
-    //emissive: Color,
-    //surface_noise_texture_handle: Option< Handle<Image> > ,
-    //surface_distortion_texture_handle: Option<  Handle<Image> > ,
-    ) ->   ToonWaterMaterial {
+pub fn build_plane_3d_cloud_material(
+   	 
+    ) ->   Plane3dCloudMaterial {
 
 
         //do these do anything ?
@@ -35,9 +32,9 @@ pub fn build_toon_water_material(
 
 			            ..Default::default()
 			        },
-			        extension: ToonWaterMaterialBase {
+			        extension: Plane3dCloudMaterialBase {
 			          //  base_color_texture: Some(texture_handle),
-			            custom_uniforms: ToonWaterMaterialUniforms::default(),
+			            custom_uniforms: Plane3dCloudMaterialUniforms::default(),
 			            surface_noise_texture: Some( DEFAULT_NOISE_MAP_HANDLE ),
 			            surface_distortion_texture: Some( DEFAULT_DISTORTION_MAP_HANDLE ),
 			            //depth_texture: None,
@@ -52,7 +49,7 @@ pub fn build_toon_water_material(
 //pub type ToonWaterMaterialBundle = MaterialMeshBundle<ToonWaterMaterial >;
 
 #[derive(Clone, ShaderType, Debug)]
-pub struct ToonWaterMaterialUniforms {
+pub struct Plane3dCloudMaterialUniforms {
 
 	pub depth_gradient_shallow: LinearRgba,
     pub depth_gradient_deep: LinearRgba,
@@ -71,19 +68,19 @@ pub struct ToonWaterMaterialUniforms {
 
  
 }
-impl Default for ToonWaterMaterialUniforms {
+impl Default for Plane3dCloudMaterialUniforms {
     fn default() -> Self {
         Self {
 		    depth_gradient_shallow: LinearRgba::new(0.325, 0.807, 0.971, 0.725),
             depth_gradient_deep: LinearRgba::new(0.086, 0.307, 0.7, 0.949),
             depth_max_distance: 2.0,
             foam_color: LinearRgba::new(0.9,0.9,0.9,1.0),
-            surface_noise_scroll: Vec2::new(0.03,0.03),
-            surface_noise_cutoff:  0.9,
+            surface_noise_scroll: Vec2::new(0.003,0.003),
+            surface_noise_cutoff:  0.8,
             surface_distortion_amount:  0.14,
             foam_max_distance: 0.6,  //foam for an obstruction in the water (from normal dot product)
             foam_min_distance: 0.14, //foam at shore
-            noise_map_scale: 2.0,
+            noise_map_scale: 0.002,
 
             //these are controlled by an update system 
             coord_offset: Vec2::new(0.0,0.0),
@@ -93,9 +90,9 @@ impl Default for ToonWaterMaterialUniforms {
 }
 
 #[derive(Asset, AsBindGroup, TypePath, Debug, Clone, Default)]
-pub struct ToonWaterMaterialBase {
+pub struct Plane3dCloudMaterialBase {
    #[uniform(20)]
-    pub custom_uniforms: ToonWaterMaterialUniforms,
+    pub custom_uniforms: Plane3dCloudMaterialUniforms,
   //  #[texture(21)]
   //  #[sampler(22)]
   //  pub base_color_texture: Option<Handle<Image>>,
@@ -113,14 +110,14 @@ pub struct ToonWaterMaterialBase {
    // pub normal_texture: Option<Handle<Image>>,
 }
 
-impl MaterialExtension for ToonWaterMaterialBase {
+impl MaterialExtension for Plane3dCloudMaterialBase {
     fn fragment_shader() -> ShaderRef {
        
-         ShaderRef::Handle(TOON_WATER_SHADER_HANDLE)
+         ShaderRef::Handle(PLANE_3D_CLOUD_SHADER_HANDLE)
     }
 
     fn deferred_fragment_shader() -> ShaderRef {
          
-         ShaderRef::Handle(TOON_WATER_SHADER_HANDLE)
+         ShaderRef::Handle(PLANE_3D_CLOUD_SHADER_HANDLE)
     }
 }

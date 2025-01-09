@@ -105,7 +105,7 @@ fn fragment(
 
     
   //  var world_position: vec4<f32> = mesh.world_position;
-    let scaled_uv =  uv_to_coord(mesh.uv) * toon_water_uniforms.noise_map_scale * 0.02 ;
+    let scaled_uv =  uv_to_coord(mesh.uv) * toon_water_uniforms.noise_map_scale  ;
     
     //saturate clamps between 0 and 1 
  
