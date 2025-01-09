@@ -78,9 +78,9 @@ impl Default for Plane3dCloudMaterialUniforms {
             surface_noise_scroll: Vec2::new(0.003,0.003),
             surface_noise_cutoff:  0.8,
             surface_distortion_amount:  0.14,
-            foam_max_distance: 0.6,  //foam for an obstruction in the water (from normal dot product)
-            foam_min_distance: 0.14, //foam at shore
-            noise_map_scale: 0.002,
+            foam_max_distance: 0.6,  //deprecated 
+            foam_min_distance: 0.14, // deprecated
+            noise_map_scale: 2.0,
 
             //these are controlled by an update system 
             coord_offset: Vec2::new(0.0,0.0),
@@ -120,4 +120,10 @@ impl MaterialExtension for Plane3dCloudMaterialBase {
          
          ShaderRef::Handle(PLANE_3D_CLOUD_SHADER_HANDLE)
     }
+ 
+    fn vertex_shader() -> ShaderRef {
+       
+         ShaderRef::Handle(PLANE_3D_CLOUD_SHADER_HANDLE)
+    }
+ 
 }
