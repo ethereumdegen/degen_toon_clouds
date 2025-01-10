@@ -41,16 +41,18 @@ struct StandardMaterial {
 };
  
  struct ToonWaterMaterialUniforms {
-    depth_gradient_shallow: vec4<f32>,
-    depth_gradient_deep: vec4<f32>,
-    depth_max_distance: f32,
+ 
+   
     foam_color: vec4<f32>,
     surface_noise_scroll: vec2<f32>,
     surface_noise_cutoff: f32,
     surface_distortion_amount: f32,
-    foam_max_distance: f32,
-    foam_min_distance: f32,
+   
     noise_map_scale: f32, 
+
+    masking_noise_map_scale: f32, 
+    masking_noise_cutoff: f32,
+    masking_noise_scroll: vec2<f32>,
 
     coord_offset: vec2<f32>,
     coord_scale: vec2<f32>,
@@ -108,6 +110,8 @@ fn fragment(
    
     let scaled_uv =  uv_to_coord(mesh.uv) * toon_water_uniforms.noise_map_scale  ;
     
+
+     let scaled_uv_for_mask =  uv_to_coord(mesh.uv) * toon_water_uniforms.masking_noise_map_scale  ;
   
 
             
@@ -115,16 +119,11 @@ fn fragment(
      //this seems to be correct 
    let water_surface_world_pos =      mesh.world_position   ;  
  
-    
-    //this is correct 
-   let screen_position_uv = (mesh.position.xy + vec2<f32>(0.5,0.5) ) /   view.viewport.zw ;
      
-   
- 
-    let water_color = mix(toon_water_uniforms.depth_gradient_shallow, toon_water_uniforms.depth_gradient_deep,  0.5 );
-  
+    
      
     let surface_noise_cutoff = toon_water_uniforms.surface_noise_cutoff ;
+     let masking_noise_cutoff = toon_water_uniforms.masking_noise_cutoff ;
  
  
    let distort_sample = textureSample(surface_distortion_texture, surface_distortion_sampler, scaled_uv   )   ;
@@ -145,9 +144,21 @@ fn fragment(
     );
     
 
+
+
+    var masking_noise_uv = vec2<f32>(
+        ( scaled_uv_for_mask.x +  (time_base * toon_water_uniforms.masking_noise_scroll.x)) %1.0 ,
+        ( scaled_uv_for_mask.y +  (time_base * toon_water_uniforms.masking_noise_scroll.y))  %1.0 
+    );
+
+
+
    let distortion_noise_sample = textureSample(surface_distortion_texture, surface_distortion_sampler, noise_uv_alt    )   ;
 
    let surface_noise_sample = textureSample(surface_noise_texture, surface_noise_sampler, noise_uv    )   ;
+
+
+   let masking_noise_sample = textureSample(surface_noise_texture, surface_noise_sampler, masking_noise_uv    )   ;
 
 
    let smoothstep_tolerance_band = 0.01 ; //controls foam edge sharpness
@@ -157,14 +168,22 @@ fn fragment(
      
     let surface_noise = smoothstep(surface_noise_cutoff -  smoothstep_tolerance_band, surface_noise_cutoff +  smoothstep_tolerance_band ,    combined_noise_sample );
 
-  
+
+     let masking_noise = smoothstep(masking_noise_cutoff -  smoothstep_tolerance_band, masking_noise_cutoff +  smoothstep_tolerance_band ,    masking_noise_sample.r  );
+
+
+    
+      let mask_output = 1.0 - masking_noise;
+    let masked_surface_noise = mask_output * surface_noise  ;
 
     var surface_noise_color = toon_water_uniforms.foam_color;
-    surface_noise_color.a *= surface_noise;
+    surface_noise_color.a *= masked_surface_noise ; //surface_noise * masked_surface_noise;
+    
 
     var color =  surface_noise_color ;
+  
  
-    return color;
+    return  color;
 }
 
 fn alpha_blend(top: vec4<f32>, bottom: vec4<f32>) -> vec4<f32> {
@@ -214,13 +233,7 @@ struct Vertex {
     @location(0) position: vec3<f32>,
     @location(1) blend_color: vec4<f32>,
 };
-
-/*
-struct VertexOutput {
-    @builtin(position) clip_position: vec4<f32>,
-    @location(0) blend_color: vec4<f32>,
-};
-*/
+ 
 
 @vertex
 fn vertex(vertex: Vertex) -> VertexOutput {

@@ -3,10 +3,7 @@
 
 use bevy::core_pipeline::prepass::NormalPrepass;
  
-use std::f32::consts::PI;
-
-  
-use bevy::asset::{AssetPath, LoadedFolder};
+ 
 use bevy::core_pipeline::prepass::DepthPrepass;
 //use bevy::pbr::{ExtendedMaterial, OpaqueRendererMethod};
 use bevy::{gltf::GltfMesh, utils::HashMap};
@@ -22,20 +19,19 @@ use bevy::{core_pipeline::bloom::BloomCompositeMode, prelude::*};
  
 
  
-use degen_toon_water::plane3d_cloud_material::{build_plane_3d_cloud_material,  Plane3dCloudMaterial};
+use degen_toon_clouds::plane3d_cloud_material::{build_plane_3d_cloud_material,  Plane3dCloudMaterial};
  
   
-use degen_toon_water:: DegenToonCloudsPlugin; 
-use degen_toon_water::camera;
+use degen_toon_clouds:: DegenToonCloudsPlugin; 
+use degen_toon_clouds::camera;
 
 
 fn main() {
     App::new()
 
-
-       // .insert_resource(BuiltVfxResource::default())
-        .insert_resource(AssetLoadingResource::default())
-        .insert_resource(FolderLoadingResource::default())
+ 
+     
+      
        //  .init_state::<LoadingState>()
         .add_plugins(DefaultPlugins.set(ImagePlugin::default_nearest()))
         //.add_plugins(bevy_obj::ObjPlugin)
@@ -58,23 +54,7 @@ fn main() {
  
 
 
-
-#[derive(Resource, Default)]
-  struct AssetLoadingResource {
-    texture_handles_map: HashMap<String, Handle<Image>>,
-    
  
-}
-
-
-#[derive(Resource, Default)]
-  struct FolderLoadingResource {
-   
-
-    textures_folder_handle: Handle<LoadedFolder>,
-   
-
-}
 
 /*
 #[derive(Event)]
@@ -93,7 +73,7 @@ fn setup(
     asset_server: ResMut<AssetServer>,
  
 
-    mut folder_loading_resource: ResMut<FolderLoadingResource>,
+  //  mut folder_loading_resource: ResMut<FolderLoadingResource>,
 
     mut meshes: ResMut<Assets<Mesh>>,
     
@@ -146,14 +126,6 @@ fn setup(
          Transform::from_xyz(0.0,200.0,0.0).with_scale( (5000.0,1.0,5000.0).into()  ),
 
   ));
-
-
-
-
- 
- 
- 
- 
 
  
  

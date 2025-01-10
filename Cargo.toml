@@ -1,8 +1,8 @@
 [package]
-name = "degen_toon_water"
+name = "degen_toon_clouds"
 version = "0.15.1" 
 license = "MIT"
-description = "A toon water shader for bevy"
+description = "A toon cloud shader for bevy"
 edition = "2021" 
 
  

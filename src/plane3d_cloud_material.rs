@@ -51,17 +51,18 @@ pub fn build_plane_3d_cloud_material(
 #[derive(Clone, ShaderType, Debug)]
 pub struct Plane3dCloudMaterialUniforms {
 
-	pub depth_gradient_shallow: LinearRgba,
-    pub depth_gradient_deep: LinearRgba,
-    pub depth_max_distance: f32,
+	  
     pub foam_color: LinearRgba,
     pub surface_noise_scroll: Vec2,
     pub surface_noise_cutoff: f32,
     pub surface_distortion_amount: f32,
-    pub foam_max_distance: f32,
-    pub foam_min_distance: f32,
+   
 
     pub noise_map_scale: f32,
+
+    pub masking_noise_map_scale: f32, 
+    pub masking_noise_cutoff: f32, 
+    pub masking_noise_scroll: Vec2,
 
     pub coord_offset: Vec2,
     pub coord_scale: Vec2,
@@ -71,16 +72,19 @@ pub struct Plane3dCloudMaterialUniforms {
 impl Default for Plane3dCloudMaterialUniforms {
     fn default() -> Self {
         Self {
-		    depth_gradient_shallow: LinearRgba::new(0.325, 0.807, 0.971, 0.725),
-            depth_gradient_deep: LinearRgba::new(0.086, 0.307, 0.7, 0.949),
-            depth_max_distance: 2.0,
-            foam_color: LinearRgba::new(0.9,0.9,0.9,1.0),
+		     
+         
+            foam_color: LinearRgba::new(0.9,0.9,0.9,0.5),
             surface_noise_scroll: Vec2::new(0.003,0.003),
-            surface_noise_cutoff:  0.8,
-            surface_distortion_amount:  0.14,
-            foam_max_distance: 0.6,  //foam for an obstruction in the water (from normal dot product)
-            foam_min_distance: 0.14, //foam at shore
-            noise_map_scale: 0.002,
+            surface_noise_cutoff:  0.5,
+            surface_distortion_amount:  0.04,
+            
+             noise_map_scale: 0.002,
+             
+
+            masking_noise_map_scale: 0.0002,
+            masking_noise_cutoff:  0.5,
+            masking_noise_scroll: Vec2::new(0.0003,0.0003),
 
             //these are controlled by an update system 
             coord_offset: Vec2::new(0.0,0.0),
