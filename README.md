@@ -1,27 +1,9 @@
 ## Degen Toon Clouds Shader for Bevy 
 
  
+See example 
 
-
-
-Enum with 2 variants of clouds (marker comp) that can be spawned 
-
-
-pub enum ToonCloudType {
-
-	CompoundBillboardCloud {
-
-
-		},
-
-	Noise3dPlaneCloud : {
-
-
-
-	}
-
-}
-
+ ![image](https://github.com/user-attachments/assets/ce500069-2d39-4296-98a3-8bae0c531e2b)
 
 
 ### Ref material 
