@@ -26,9 +26,10 @@ pub fn build_plane_3d_cloud_material(
 			            base_color: base_color.into(),
 			            emissive: emissive.into(),
 			            opaque_render_method: OpaqueRendererMethod::Auto,
-			            alpha_mode: AlphaMode::Blend,
+			            alpha_mode: AlphaMode::Mask(0.5),
 			            double_sided: true,
 			            cull_mode: None, 
+                        unlit: true, 
 
 			            ..Default::default()
 			        },
